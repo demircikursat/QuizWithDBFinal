@@ -1,0 +1,480 @@
+﻿@model List<Question>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Sorular</title>
+
+
+
+
+
+    <style>
+
+
+
+        body {
+            font-family: "Arial", sans-serif;
+            font-size: 17px;
+            -webkit-text-size-adjust: 100%;
+            color: black;
+            background-color: gray;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+        }
+
+        .quiz {
+            margin: auto;
+            width: 100%;
+            max-width: 30em;
+            display: grid;
+            grid-auto-rows: auto;
+            grid-columns: 1fr;
+            padding: 2em;
+            grid-gap: 1em;
+            border: 1px dotted black;
+            box-shadow: 0px 5px 8px rgba(0, 10, 20, 0.06);
+            background-color: white;
+        }
+
+        .quiz-title {
+            font-size: 2em;
+        }
+
+        .quiz-question {
+            font-size: 1.65em;
+        }
+
+        .quiz-answer {
+            position: relative;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            user-select: none;
+            background: linear-gradient($colorLight, white);
+            box-shadow: 0px 2px 2px 1px rgba(0, 10, 20, 0.07);
+        }
+
+            .quiz-answer p {
+                z-index: 1000;
+            }
+
+        .circle {
+            position: relative;
+            height: 1em;
+            width: 1em;
+            margin-left: 1em;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            border: 0.3em solid double;
+            background-color: white;
+        }
+
+        .quiz-answer p {
+            display: block;
+            margin: 1em;
+            z-index: 10;
+        }
+
+        .feedback {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background-color: red;
+            color: white;
+            min-height: 100%;
+            max-width: 88.6%;
+            padding: 1em 1em 1em 2em;
+            z-index: 100;
+            opacity: 1;
+            visibility: hidden;
+            clip-path: polygon(1.25em 0, 100% 0, 100% 100%, 1.25em 100%, 0 50%);
+        }
+
+        .correct .feedback {
+            background-color: green;
+        }
+
+        input {
+            display: none;
+        }
+
+        .highlight {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: skyblue
+        }
+
+        input:hover ~ .highlight {
+            background-color: navajowhite;
+        }
+
+        input:checked ~ .highlight {
+            background-color: lightslategray;
+        }
+
+        input:checked ~ .circle {
+            background-color: black;
+            border-color: blue;
+        }
+
+        .correct input:checked ~ .circle {
+            border-color: green;
+        }
+
+        input:checked ~ .feedback {
+            visibility: visible;
+            animation: feedbackfade 3s ease 3s;
+            animation-fill-mode: forwards;
+        }
+
+
+
+        @@keyframes feedbackfade {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .GizliSoru {
+            display: none;
+        }
+
+        .AcikSoru {
+            display: block;
+        }
+
+        .button1 {
+            position: absolute;
+            top: 780px;
+            right: 300px;
+            background-color: cyan;
+            color: black;
+            min-height: 10%;
+            max-width: 88.6%;
+            padding: 1em 1em 1em 1em;
+            z-index: 100;
+            opacity: 1;
+            text-shadow: initial;
+            clip-path: polygon(75% 20%, 100% 50%, 75% 80%, 0 80%, 25% 50%, 0 20%);
+        }
+
+        .button2 {
+            background-color: #1c87c9;
+            border: none;
+            color: white;
+            padding: 20px 34px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+
+
+
+
+
+</head>
+<body>
+    <div id="Sorular" class="container col-lg-12">
+        @foreach (Question item in Model)
+        {
+
+            <div style="margin:auto;padding-bottom:20px" class="quiz GizliSoru">
+
+
+
+
+                <div class="quiz-question" id="sorular2">@item.QuestionItem</div>
+
+                @foreach (Option item2 in item.Options.ToList())
+                {
+
+                    if (item2.IsItTrue == true)
+                    {
+
+                        <label class="quiz-answer correct">
+                            <input onclick="PuanArttir()" type="radio" name="question1" id="@item2.ID" class="Option">
+                            <div class="highlight"></div>
+                            <div class="circle"></div>
+                            <p>@item2.OptionItem</p>
+                            <span class="feedback">Doğru Cevap</span>
+                        </label>
+
+                    }
+                    else
+                    {
+                        <label class="quiz-answer">
+                            <input onclick="YanlısCevap()" type="radio" name="question1" id="@item2.ID" class="Option">
+                            <div class="highlight"></div>
+                            <div class="circle"></div>
+                            <p>@item2.OptionItem</p>
+                            <span class="feedback">Yanlış Cevap</span>
+                        </label>
+                    }
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+        }
+
+        <button id="btn1" class="button1" onclick="NextQuestion()">&nbsp;&nbsp;&nbsp;İLERLE</button>
+
+    </div>
+
+
+
+
+    <div style="color:black;border-radius:10px 10px" class="container col-lg-12 GizliSoru" id="sinavSonuc">
+
+        <div style="background-color:aqua" class="quiz">
+
+
+
+            <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" class="quiz-question" id="lblSinavSonuc">
+            </h1>
+            <a href="~/Home/Login" class="button2">TESTTEN ÇIKIŞ</a>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+    <script>
+
+        var sayi = 0;
+        var puan = 0;
+        var sayac = 0;
+        var link = "";
+
+
+
+
+
+        jQuery(document).ready(function () {
+
+
+            $("#Sorular").find("div").eq(sayi).addClass("AcikSoru");
+
+
+
+
+
+        })
+
+        btn1.disabled = true;
+        window.addEventListener('contextmenu', function (e) {
+            // do something here...
+            e.preventDefault();
+        }, false);/*bunu stack'te buldum hazır bi kod, kaynak kodunda doğru yanlış cevaplar göründüğü için sağ click'i engelledim*/
+
+
+
+
+
+
+
+
+
+
+
+        function PuanArttir() {
+
+            puan += 1;
+            sayac += 1;
+
+
+            var elemanlar = document.getElementsByClassName("Option");
+
+            for (var i = 0; i < elemanlar.length; i++) {
+
+
+                elemanlar[i].disabled = true;
+
+            }
+
+
+
+            btn1.disabled = false;
+
+
+
+
+
+
+
+
+        }
+        function YanlısCevap() {
+            sayac += 1;
+            var elemanlar = document.getElementsByClassName("Option");
+
+            for (var i = 0; i < elemanlar.length; i++) {
+
+
+                elemanlar[i].disabled = true;
+
+            }
+
+            btn1.disabled = false;
+
+
+
+        }
+
+        function NextQuestion() {
+            if (sayac < 5) {
+                $("#Sorular").find("div").eq(sayi).removeClass("AcikSoru");
+                $("#Sorular").find("div").eq(sayi).addClass("GizliSoru");
+
+                sayi += 10;
+
+
+                $("#Sorular").find("div").eq(sayi).removeClass("GizliSoru");
+                $("#Sorular").find("div").eq(sayi).addClass("AcikSoru");
+
+                var elemanlar = document.getElementsByClassName("Option");
+
+                for (var i = 0; i < elemanlar.length; i++) {
+
+
+                    elemanlar[i].disabled = false;
+
+                }
+                btn1.disabled = true;
+
+
+            }
+            else {
+                $("#Sorular").find("div").eq(sayi).removeClass("AcikSoru");
+                $("#Sorular").find("div").eq(sayi).addClass("GizliSoru");
+                var elemanlar = document.getElementsByClassName("Option");
+
+                for (var i = 0; i < elemanlar.length; i++) {
+
+
+                    elemanlar[i].disabled = false;
+
+                }
+                btn1.style = "display:none";
+
+
+
+
+                $.ajax({
+                    url: '@Url.Action("Quiz","Home")',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { skor: puan },
+                    success: function (data) {
+                        if (data.result == 1) {
+
+                            document.clear();
+
+                            var yazi = document.getElementById("lblSinavSonuc");
+
+                            $("#Sorular").remove();
+                            $("#sinavSonuc").removeClass("GizliSoru");
+                            $("#sinavSonuc").addClass("AcikSoru");
+
+                            yazi.innerText = "Test'in sonuna geldin. 5 soruda " + data.puan + " doğru yanıt verdin.";
+
+
+
+
+                        }
+                        else
+                            alert("İşlem Başarısız!");
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+        }
+       function TesttenCikis(urlAction) {
+        $.ajax({
+            type: "POST",
+            url: urlAction,
+            data: {},
+            datatype: "JSON",
+            contentType: "application/json; charset=utf-8",
+            success: function (returndata) {
+                if (returndata.ok)
+                    window.location = returndata.newurl;
+                else
+                    window.alert(returndata.message);
+
+            }
+        }
+        );
+    }
+
+
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿@model AppUser
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body class="login-body">
+    <div class="container">
+        @ViewBag.KullaniciYok
+        @ViewBag.TestCozuldu
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.TextBoxFor(x => x.AppUserName, new { @class = "form-control", placeholder = "Kullanıcı Adı Giriniz." })
+            <button class="btn btn-lg btn-login btn-block" type="submit">Login</button>
+        }
+    </div>
+
+</body>
+</html>
