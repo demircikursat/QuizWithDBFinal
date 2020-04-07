@@ -137,6 +137,8 @@
     <Content Include="Views\Home\Quiz.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Home\Snake.cshtml" />
+    <Content Include="Views\Home\AraView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

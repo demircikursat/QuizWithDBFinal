@@ -19,6 +19,12 @@ namespace QuizWithDBUI.Controllers
         // GET: Home
         public ActionResult Quiz()
         {
+            AppUser kullanici = Session["girisyapan"] as AppUser;
+            if (kullanici.Score!=null)
+            {
+                ViewBag.testcozuldu = "Daha önce testi cozdunuz.";
+            }
+            
             return View(qRep.GetAll());
         }
 
@@ -33,7 +39,7 @@ namespace QuizWithDBUI.Controllers
 
                 kullanici.Score = skor;
                 aRep.Update(kullanici);
-                Session.Clear();
+                
 
 
 
@@ -60,24 +66,67 @@ namespace QuizWithDBUI.Controllers
         {
             AppUser girisyapan = aRep.Default(x => x.AppUserName == item.AppUserName);
             Session["girisyapan"] = girisyapan;
-            if (Session["girisyapan"] != null && girisyapan.Score == null)
-            {
+            return RedirectToAction("AraView");
+            //if (Session["girisyapan"] != null && girisyapan.Score == null)
+            //{
 
-                return RedirectToAction("Quiz");
-            }
-            else if (Session["girisyapan"] != null && girisyapan.Score != null)
-            {
-                ViewBag.TestCozuldu = "Daha önce testi çözdünüz.";
+            //    return RedirectToAction("Quiz");
+            //}
+            //else if (Session["girisyapan"] != null && girisyapan.Score != null)
+            //{
+            //    ViewBag.TestCozuldu = "Daha önce testi çözdünüz.";
+               
 
-            }
-            else
-            {
-                ViewBag.KullaniciYok = "KullaniciBulunamadi";
+            //}
+            //else
+            //{
+            //    ViewBag.KullaniciYok = "KullaniciBulunamadi";
 
-            }
+            //}
 
+            //return View();
+
+        }
+        
+        public ActionResult AraView()
+        {
+            AppUser kullanici = Session["girisyapan"] as AppUser;
+            
+            return View(kullanici);    
+        }
+
+        public ActionResult LogOut()
+        {
+            Session.Clear();
+            return RedirectToAction("Login");
+        }
+
+       
+
+        public ActionResult Snake()
+        {
             return View();
+        }
 
+        [HttpPost]
+
+        public ActionResult Snake(int skor2)
+        {
+            try
+            {
+                AppUser kullanici = Session["girisyapan"] as AppUser;
+                kullanici.SnakeScore = skor2;
+              
+                aRep.Update(kullanici);
+                
+                return Json(new { result = 1, puan = skor2 });
+            }
+            catch (Exception)
+            {
+
+                return Json(new { result = 0 });
+            }
+           
         }
     }
 }

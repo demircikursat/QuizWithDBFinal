@@ -1,0 +1,94 @@
+﻿@model AppUser
+@{
+    ViewBag.Title = "AraView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+
+    .Acik{
+        display:block;
+    }
+    .Gizli{
+        display:none;
+    }
+    .button2 {
+        background-color: #1c87c9;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 20px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+</style>
+
+<h2>SEÇİM YAPIN</h2>
+<div id="asdasd" class="Gizli">
+
+    
+    <a href="~/Home/Quiz" class="button2"  id="quizbut">QUIZ ÇÖZ</a>
+    
+
+   
+</div>
+<div>
+    <a href="~/Home/Snake" id="snakeButton" class="button2">SNAKE OYNA</a>
+    @Html.ActionLink("ÇıkışYap", "LogOut")
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+
+    jQuery(document).ready(function () {
+
+        var modelScore = @Html.Raw(Json.Encode(Model.Score)); //Model'in propertylerine doğrudan ulaşılamıyor o yüzden Raw metodu kullandık.
+
+        if (modelScore == null) {
+            $("#asdasd").removeClass("Gizli");
+            $("#asdasd").addClass("Acik");
+        }
+    })
+
+
+
+
+
+
+
+
+
+        @* deneyip beceremediğim ajax isteği bu, ajax get metoduna müsaade etmiyormuş dışardan postman gibibi tool ile kritik verilere erişilmesini engellemek için. Yine de force edebiliyoruz controller kısmında return Json satırında allowget diyerek. örneğin : return Json("Secrets", JsonRequestBehavior.AllowGet);
+
+
+            $.ajax({
+            url: '@Url.Action("AraView","Home")',
+            type: 'GET',
+            dataType: 'json',
+            data: { quizcozuldu },
+            success: function (data) {
+                if (data.quizcozuldu == 1) {
+
+                    var buttonquiz = document.getElementById("quizButton");
+
+
+                    buttonquiz.removeClass("tiklanabilir");
+                    buttonquiz.addClass("tiklanamaz");
+
+                }
+
+
+            }
+        });*@
+
+
+
+
+
+
+
+</script>
+
+

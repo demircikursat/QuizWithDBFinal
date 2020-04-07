@@ -10,6 +10,7 @@ namespace Project.MODEL.Entities
     {
         public string AppUserName { get; set; }
         public int? Score { get; set; }
+        public int? SnakeScore { get; set; }
 
 
     }

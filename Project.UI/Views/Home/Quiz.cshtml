@@ -275,7 +275,7 @@
 
             <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" class="quiz-question" id="lblSinavSonuc">
             </h1>
-            <a href="~/Home/Login" class="button2">TESTTEN ÇIKIŞ</a>
+            <a href="~/Home/AraView" class="button2">TESTTEN ÇIKIŞ</a>
 
 
         </div>
@@ -418,7 +418,7 @@
                     data: { skor: puan },
                     success: function (data) {
                         if (data.result == 1) {
-
+                            
                             document.clear();
 
                             var yazi = document.getElementById("lblSinavSonuc");
@@ -450,26 +450,29 @@
             }
 
 
-
+        
 
         }
-       function TesttenCikis(urlAction) {
-        $.ajax({
-            type: "POST",
-            url: urlAction,
-            data: {},
-            datatype: "JSON",
-            contentType: "application/json; charset=utf-8",
-            success: function (returndata) {
-                if (returndata.ok)
-                    window.location = returndata.newurl;
-                else
-                    window.alert(returndata.message);
+        var msgDone="Test sonuçlarınız sisteme işlendi. Teşekkür ederiz."
+    //   function TesttenCikis(urlAction) {
+    //    $.ajax({
+    //        type: "POST",
+    //        url: urlAction,
+    //        data: { msgDone },
+    //        datatype: "json",
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (returndata) {
+    //            if (returndata.ok) {
+    //                window.location = returndata.newurl;
+                     
+    //            }
+    //            else
+    //                window.alert(returndata.message);
 
-            }
-        }
-        );
-    }
+    //        }
+    //    }
+    //    );
+    //}
 
 
 
