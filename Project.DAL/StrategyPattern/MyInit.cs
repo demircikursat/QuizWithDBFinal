@@ -117,6 +117,8 @@ namespace Project.DAL.StrategyPattern
             context.AppUser.Add(a2);
             context.SaveChanges();
 
+            
+
 
 
 

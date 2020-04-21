@@ -11,20 +11,30 @@ namespace QuizWithDBUI.Controllers
     {
         QuestionRepository qRep;
         AppUserRepository aRep;
+        
+        ScoreRepository sRep;
+        AppUserScoreRepository asRep;
         public HomeController()
         {
+
             qRep = new QuestionRepository();
             aRep = new AppUserRepository();
+            
+            sRep = new ScoreRepository();
+            asRep = new AppUserScoreRepository();
         }
         // GET: Home
         public ActionResult Quiz()
         {
-            AppUser kullanici = Session["girisyapan"] as AppUser;
-            if (kullanici.Score!=null)
+
+            AppUserScore kullaniciScore = new AppUserScore();
+            kullaniciScore.AppUser = Session["girisyapan"] as AppUser;
+
+            if (kullaniciScore.Score != null)
             {
                 ViewBag.testcozuldu = "Daha önce testi cozdunuz.";
             }
-            
+
             return View(qRep.GetAll());
         }
 
@@ -34,15 +44,17 @@ namespace QuizWithDBUI.Controllers
         {
             try
             {
-                AppUser kullanici = Session["girisyapan"] as AppUser;
+                AppUserScore kullaniciScore = new AppUserScore();
+                kullaniciScore.AppUser = Session["girisyapan"] as AppUser;
+                kullaniciScore.Game = "Quiz";
+                kullaniciScore.Score = new Score();
+                kullaniciScore.Score.ScoreValue = skor;
+                kullaniciScore.AppUser.QuizCozuldu = 1;
 
 
-                kullanici.Score = skor;
-                aRep.Update(kullanici);
-                
 
 
-
+                asRep.Add(kullaniciScore);
 
 
                 return Json(new { result = 1, puan = skor, ok = false, newurl = Url.Action("Login", "Home") });
@@ -75,7 +87,7 @@ namespace QuizWithDBUI.Controllers
             //else if (Session["girisyapan"] != null && girisyapan.Score != null)
             //{
             //    ViewBag.TestCozuldu = "Daha önce testi çözdünüz.";
-               
+
 
             //}
             //else
@@ -87,12 +99,12 @@ namespace QuizWithDBUI.Controllers
             //return View();
 
         }
-        
+
         public ActionResult AraView()
         {
             AppUser kullanici = Session["girisyapan"] as AppUser;
-            
-            return View(kullanici);    
+
+            return View(kullanici);
         }
 
         public ActionResult LogOut()
@@ -101,32 +113,83 @@ namespace QuizWithDBUI.Controllers
             return RedirectToAction("Login");
         }
 
-       
+
 
         public ActionResult Snake()
         {
-            return View();
+            AppUser kullanici = Session["girisyapan"] as AppUser;
+            return View(kullanici);
         }
 
         [HttpPost]
 
         public ActionResult Snake(int skor2)
         {
-            try
-            {
-                AppUser kullanici = Session["girisyapan"] as AppUser;
-                kullanici.SnakeScore = skor2;
-              
-                aRep.Update(kullanici);
-                
-                return Json(new { result = 1, puan = skor2 });
-            }
-            catch (Exception)
-            {
+            //try
+            //{
+            AppUser kullanici = Session["girisyapan"] as AppUser;
 
-                return Json(new { result = 0 });
+
+
+            if (asRep.Any(x => x.AppUserID == kullanici.ID && x.Game == "Snake") == true)
+            {
+                
+                AppUserScore varOlanKullaniciScore = asRep.Default(x => x.AppUserID == kullanici.ID && x.Game == "Snake");
+
+                Score skor = sRep.Default(x => x.ID == varOlanKullaniciScore.ScoreID);
+                if (skor2>skor.ScoreValue)
+                {
+                    skor.ScoreValue = skor2;
+                    sRep.Update(skor);
+                }
+                else
+                {
+                    ViewBag.gec = "Daha önceki skorunuzu geçemediniz. Oyun kaydedilmedi.";
+                }
+                
+                
+
             }
-           
+            else
+            {
+                AppUserScore kullaniciScore = new AppUserScore();
+                kullaniciScore.AppUserID = kullanici.ID;
+
+                Score score = new Score();
+                score.ScoreValue = skor2;
+                sRep.Add(score);
+
+                kullaniciScore.ScoreID = score.ID;
+                kullaniciScore.Game = "Snake";
+
+
+
+
+
+
+                asRep.Add(kullaniciScore);
+            }
+
+
+
+
+
+            return Json(new { result = 1, puan = skor2 });
+            //}
+            //catch (Exception)
+            //{
+
+            //    return Json(new { result = 0 });
+            //}
+
+        }
+
+        public PartialViewResult OyunScorGoster(string gameName)
+        {
+
+
+
+            return PartialView("_OyunScorGoster", asRep.ScoreListele(gameName));
         }
     }
 }

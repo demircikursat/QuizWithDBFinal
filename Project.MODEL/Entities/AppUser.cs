@@ -9,8 +9,8 @@ namespace Project.MODEL.Entities
     public class AppUser : BaseEntity
     {
         public string AppUserName { get; set; }
-        public int? Score { get; set; }
-        public int? SnakeScore { get; set; }
+        public int QuizCozuldu { get; set; }
+        public virtual List<AppUserScore> AppUserScores { get; set; }
 
 
     }

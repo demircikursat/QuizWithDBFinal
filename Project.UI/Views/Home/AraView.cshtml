@@ -2,54 +2,98 @@
 @{
     ViewBag.Title = "AraView";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
-<style>
-
-    .Acik{
-        display:block;
-    }
-    .Gizli{
-        display:none;
-    }
-    .button2 {
-        background-color: #1c87c9;
-        border: none;
-        color: white;
-        padding: 5px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 20px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-</style>
-
-<h2>SEÇİM YAPIN</h2>
-<div id="asdasd" class="Gizli">
-
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  
     
-    <a href="~/Home/Quiz" class="button2"  id="quizbut">QUIZ ÇÖZ</a>
-    
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="~/Content/11.css" rel="stylesheet" />
+</head>
+
+<body style="padding:0">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <nav style="padding:0" class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
+        
+       
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="~/Home/AraView">
+                        <i class="fa fa-home"></i>
+                        Ana Sayfa
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item Gizli" id="asdasd">
+                    <a class="nav-link" href="~/Home/Quiz">
+                        <i class="fa fa-envelope-o">
+                            <span class="badge badge-danger">11</span>
+                        </i>
+                        Quiz
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Home/Snake">
+                        <i class="fa fa-bell">
+
+                        </i>
+                        Snake
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("LogOut","Home")">
+                        <i class="fa fa-bell">
+
+                        </i>
+                        ÇIKIŞ YAP
+                    </a>
+                </li>
+
+            </ul>
+            
+                
+                
+        </div>
+    </nav>
 
    
-</div>
-<div>
-    <a href="~/Home/Snake" id="snakeButton" class="button2">SNAKE OYNA</a>
-    @Html.ActionLink("ÇıkışYap", "LogOut")
-</div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
 
     jQuery(document).ready(function () {
+        
+        var modelScore = @Html.Raw(Json.Encode(Model.QuizCozuldu)); //Model'in propertylerine doğrudan ulaşılamıyor o yüzden Raw metodu kullandık.
+        
 
-        var modelScore = @Html.Raw(Json.Encode(Model.Score)); //Model'in propertylerine doğrudan ulaşılamıyor o yüzden Raw metodu kullandık.
-
-        if (modelScore == null) {
+        if (modelScore == 0) {
             $("#asdasd").removeClass("Gizli");
             $("#asdasd").addClass("Acik");
         }
+        
     })
 
 

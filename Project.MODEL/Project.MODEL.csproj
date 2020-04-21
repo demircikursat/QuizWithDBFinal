@@ -52,9 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\AppUser.cs" />
+    <Compile Include="Entities\AppUserScore.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Option.cs" />
     <Compile Include="Entities\Question.cs" />
+    <Compile Include="Entities\Score.cs" />
     <Compile Include="Enums\DataStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

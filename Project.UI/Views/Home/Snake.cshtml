@@ -1,27 +1,85 @@
-﻿
+﻿@model AppUser
 @{
     ViewBag.Title = "Snake";
 }
-<style>
-    .Gizli{
-        display:none;
-    }
 
-    .Acik{
-        display:block;
-    }
-</style>
+<!doctype html>
+<html lang="en">
 
-<canvas id="game" width="400" height="400" class="Acik"></canvas>
-<h1 id="lblSnakeSonuc">
-</h1>
-<div id="SnakeSonuc" >
-    
-    <a href="~/Home/Snake" id="btnNewGame">YENİ OYUN</a>
-    @Html.ActionLink("Menuye Don","AraView")
-    @Html.ActionLink("ÇIKIŞ YAP", "LogOut")
-</div>
-<script>
+<head>
+
+    <link href="~/Content/11.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<nav style="padding:0" class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
+
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <center>
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="~/Home/AraView">
+                        <i class="fa fa-home"></i>
+                        Ana Sayfa
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item Gizli" id="asdasd">
+                    <a class="nav-link" href="~/Home/Quiz">
+                        <i class="fa fa-envelope-o">
+                            <span class="badge badge-danger">11</span>
+                        </i>
+                        Quiz
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Home/Snake">
+                        <i class="fa fa-bell">
+
+                        </i>
+                        Snake
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("LogOut","Home")">
+                        <i class="fa fa-bell">
+
+                        </i>
+                        ÇIKIŞ YAP
+                    </a>
+                </li>
+
+            </ul>
+        </center>
+
+
+    </div>
+</nav>
+<body style="padding:0">
+
+    <center>
+
+
+        <canvas id="game" width="400" height="400" class="Acik"></canvas>
+
+        <h1 id="lblSnakeSonuc">
+        </h1>
+        <br />
+
+        <div id="SnakeSonuc">
+
+            <a href="~/Home/Snake" id="btnNewGame">YENİ OYUN</a>
+
+        </div>
+        <br />
+        <table border="2" class="table table-hover" id="Score"></table>
+
+        <script>
 class SnakeGame {
   constructor() {
     this.canvas = document.getElementById('game');
@@ -86,29 +144,38 @@ class SnakeGame {
         // Bastıysa game over olduk, oyunu resetle:
           //this.reset();
           clearInterval(this.timer);
-              var skor = this.tailSize;
+
               var puan = this.tailSize - 5;
           $.ajax({
               url: '@Url.Action("Snake","Home")',
               type: 'POST',
               dataType: 'json',
-              data: { skor2: skor },
+              data: { skor2: puan },
               success: function (data) {
                   if (data.result == 1) {
 
                       document.clear();
-
-                      
-
-                      var yazi = document.getElementById("lblSnakeSonuc");
-
                       $("#game").remove();
+                      var yazi = document.getElementById("lblSnakeSonuc");
+                      yazi.innerText = "Oyunun sonuna geldin. Skorun: " + String(puan) + " ";
+
+
                       $("#SnakeSonuc").removeClass("Gizli");
                       $("#SnakeSonuc").addClass("Acik");
                       $("#btnNewGame").removeClass("Gizli");
                       $("#btnNewGame").addClass("Acik");
 
-                      yazi.innerText = "Oyunun sonuna geldin. Skorun: " + String(puan) + " ";
+                      var oyunAdi = "Snake";
+                      $.get("/Home/OyunScorGoster/?gameName=" + oyunAdi + "", function (gelenVeri) {
+
+
+
+                          $("#Score").empty();
+                          $("#Score").html(gelenVeri);
+
+
+
+                      });
 
 
 
@@ -190,14 +257,37 @@ class SnakeGame {
       this.velocityY = 1;
     }
   }
-    }
+        }
+
+
 
 
 // Yeni oyun oluştur:
 const game = new SnakeGame();
 
 // Sayfa yüklendiğinde oyunu oynanabilir hale getir:
-    window.onload = () => game.init();
+        window.onload = () => game.init();
+
+            jQuery(document).ready(function () {
 
 
-</script>
+               var modelScore = @Html.Raw(Json.Encode(Model.QuizCozuldu)); //Model'in propertylerine doğrudan ulaşılamıyor o yüzden Raw metodu kullandık.
+
+
+        if (modelScore == 0) {
+            $("#asdasd").removeClass("Gizli");
+            $("#asdasd").addClass("Acik");
+        }
+
+
+
+
+
+            })
+
+        </script>
+    </center>
+
+
+</body>
+</html>

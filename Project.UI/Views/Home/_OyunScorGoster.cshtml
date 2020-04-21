@@ -1,0 +1,19 @@
+﻿@model List<AppUserScore>
+
+
+<tr>
+    <th>Kullanici Adi</th>
+    <th>Score</th>
+</tr>
+
+
+    @foreach (AppUserScore item in Model)
+    {
+        <tr>
+            <td>@item.AppUser.AppUserName</td>
+            <td>@item.Score.ScoreValue</td>
+
+        </tr>
+    }
+
+
